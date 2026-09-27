@@ -1,0 +1,13 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.db
+*.sqlite
+.DS_Store
+node_modules/
+dist/
+backend/uploads/
+!backend/uploads/.gitkeep
+frontend/package-lock.json
