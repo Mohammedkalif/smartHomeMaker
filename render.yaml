@@ -8,6 +8,10 @@ services:
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
     envVars:
+      # Render requires a fully qualified version for PYTHON_VERSION.
+      # pydantic 2.10.4 / pydantic-core has compatible Python 3.12 wheels.
+      - key: PYTHON_VERSION
+        value: 3.12.11
       - key: DATABASE_URL
         fromDatabase:
           name: smart-homemaker-db

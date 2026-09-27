@@ -11,7 +11,17 @@ async function request(path, options = {}) {
   if (token) headers.set("Authorization", `Bearer ${token}`);
   const response = await fetch(`${API}${path}`, { ...options, headers });
   if (!response.ok) throw new Error(await readError(response));
-  return response.json();
+  return readJson(response);
+}
+
+async function readJson(response) {
+  const body = await response.text();
+  if (!body) throw new Error("The API returned an empty response. Check that VITE_API_BASE points to the deployed backend URL.");
+  try {
+    return JSON.parse(body);
+  } catch {
+    throw new Error("The API returned an invalid response. Check that VITE_API_BASE points to the deployed backend URL.");
+  }
 }
 
 async function readError(response) {
@@ -38,7 +48,7 @@ export async function updateProfile(payload) {
 export async function authenticate(mode, payload) {
   const response = await fetch(`${API}/api/auth/${mode}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
   if (!response.ok) throw new Error(await readError(response));
-  return response.json();
+  return readJson(response);
 }
 
 export async function sendChat(message) {
